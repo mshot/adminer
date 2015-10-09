@@ -1040,9 +1040,9 @@ if (!defined("DRIVER")) {
 		$structured_types[$key] = array_keys($val);
 	}
 	$unsigned = array("unsigned", "zerofill", "unsigned zerofill"); ///< @var array number variants
-	$operators = array("=", "<", ">", "<=", ">=", "!=", "LIKE", "LIKE %%", "REGEXP", "IN", "IS NULL", "NOT LIKE", "NOT REGEXP", "NOT IN", "IS NOT NULL", "SQL"); ///< @var array operators used in select
+	$operators = array("=", "<", ">", "<=", ">=", "!=", "LIKE", "LIKE %%", "REGEXP", "IN", "IS NULL", "NOT LIKE","NOT LIKE %%", "NOT REGEXP", "NOT IN", "IS NOT NULL", "SQL"); ///< @var array operators used in select
 	$functions = array("char_length","trim", "date", "from_unixtime", "lower", "floor", "round", "ceil", "sec_to_time", "time_to_sec", "upper"); ///< @var array functions used in select
-	$grouping = array("avg", "count", "count distinct", "group_concat","group_concat distinct", "max", "min", "sum"); ///< @var array grouping functions used in select
+	$grouping = array("avg", "count", "count distinct", "group_concat","group_concat distinct","distinct", "max", "min", "sum"); ///< @var array grouping functions used in select
 	$edit_functions = array( ///< @var array of array("$type|$type2" => "$function/$function2") functions used in editing, [0] - edit and insert, [1] - edit only
 		array(
 			"char" => "md5/sha1/password/encrypt/uuid", //! JavaScript for disabling maxlength

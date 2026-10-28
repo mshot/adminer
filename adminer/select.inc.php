@@ -408,6 +408,12 @@ if (!$columns && support("table")) {
 			foreach ($result_columns as $key => $val) {
 				$field = $fields[$val["col"]];
 				$name = ($field ? adminer()->fieldName($field, $rank) : ($val["fun"] ? ($val["col"] != "" ? h($val["col"]) : "*") : h($key)));
+				$is_pk = false;
+				$is_pk = ($field["primary"] > 0);
+				$is_fk = false;
+				if (array_key_exists($key , $foreign_keys)) {
+    				$is_fk = true;
+				}
 				if ($name != "") {
 					$rank++;
 					$names[$key] = $name;
@@ -416,7 +422,7 @@ if (!$columns && support("table")) {
 					$desc = "&desc[0]=1";
 					$sort_column = preg_replace('~ DESC( NULLS LAST)?$~', '', $order[0]);
 					$sorted = ($sort_column == $column || $sort_column == $key); // $sort_column == $key - COUNT(*)
-					echo "<th id='th[" . h(bracket_escape($key)) . "]'" . ($sorted ? " aria-sort='" . ($sort_column == $order[0] ? "ascending" : "descending") . "'" : "") . ">";
+					echo "<th id='th[" . h(bracket_escape($key)) . "]'" . ($sorted ? " aria-sort='" . ($sort_column == $order[0] ? "ascending" : "descending") . "'" : "") . ($is_pk ? "key='primary'" : ($is_fk ? "key='foreign'" : "")) .">";
 					$fun = apply_sql_function(h($val["fun"]), $name);
 					$sortable = isset($field["privileges"]["order"]) || $val["fun"];
 					echo ($sortable ? "<a href='" . h($href . ($sorted && $sort_column == $order[0] ? $desc : '')) . "'>$fun</a>" : $fun);

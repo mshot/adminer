@@ -725,7 +725,7 @@ class Adminer {
 			$_GET["where"][$key] = $val; // used also by selectSearchPrint() and by the COUNT(*) links
 			$col = $val["col"];
 			if (("$col$val[val]" != "" || preg_match('~NULL$~', $val["op"])) && in_array($val["op"], $operators)) {
-				if ($val["op"] == "SQL" && (!$_POST || !verify_token())) {
+				if (($val["op"] == "SQL") && (!$_POST || !verify_token())) { //|| $val["op"] == "SQL IN" || $val["op"] == "SQL NOT IN"
 					SqlDb::$untrusted = true; // the condition can be sent by GET which is not protected by the CSRF token
 				}
 				$conds = array();
@@ -749,16 +749,26 @@ class Adminer {
 	* @param string $op one of operators()
 	*/
 	function selectSearchCondition(string $column, string $op, string $val): string {
+		if ($op == "SQL") {
+			return "$column $val"; // SQL injection
+		}
+		if ($op == "SQL IN") {
+			return "$column IN($val)"; // SQL injection
+		}
+		if ($op == "SQL NOT IN") {
+			return "$column NOT IN($val)"; // SQL injection
+		}
 		if (preg_match('~IN$~', $op)) {
 			return "$column $op " . ($val != "" ? process_in($val) : "(NULL)");
 		}
 		if ($op == "BETWEEN") {
 			return "$column $op " . process_between($val);
-		}
-		if ($op == "SQL") {
-			return "$column $val"; // SQL injection
-		}
+		}		
 		if (preg_match('~^(I?LIKE) %%$~', $op, $match)) {
+			// the searched value is compared with the value displayed in select, so it is not passed through unconvert_field()
+			return "$column $match[1] " . q("%$val%");
+		}
+		if (preg_match('~^(NOT LIKE) %%$~', $op, $match)) {
 			// the searched value is compared with the value displayed in select, so it is not passed through unconvert_field()
 			return "$column $match[1] " . q("%$val%");
 		}
@@ -932,6 +942,12 @@ class Adminer {
 	*/
 	function processInput(array $field, string $value, ?string $function = ""): string {
 		if ($function == "SQL") {
+			return $value; // SQL injection
+		}
+		if ($function == "SQL IN") {
+			return $value; // SQL injection
+		}
+		if ($function == "SQL NOT IN") {
 			return $value; // SQL injection
 		}
 		$name = $field["field"];

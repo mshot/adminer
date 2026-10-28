@@ -933,7 +933,7 @@ function csv_value(string $val): string {
 * @param string $column escaped column identifier
 */
 function apply_sql_function(?string $function, string $column): string {
-	return ($function ? ($function == "unixepoch" ? "DATETIME($column, '$function')" : ($function == "count distinct" ? "COUNT(DISTINCT " : strtoupper("$function(")) . "$column)") : $column);
+	return ($function ? ($function == "unixepoch" ? "DATETIME($column, '$function')" : ($function == "count distinct" ? "COUNT(DISTINCT " :  ($function == "group_concat distinct" ? "GROUP_CONCAT(DISTINCT " : strtoupper("$function("))) . "$column)") : $column);
 }
 
 /** Get path of the temporary directory */

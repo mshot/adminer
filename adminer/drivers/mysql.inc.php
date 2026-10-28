@@ -272,12 +272,12 @@ if (!defined('Adminer\DRIVER')) {
 		static $serverSocket = true;
 
 		public $unsigned = array("unsigned", "zerofill", "unsigned zerofill");
-		public $functions = array("char_length", "date", "from_unixtime", "lower", "round", "floor", "ceil", "sec_to_time", "time_to_sec", "upper");
-		public $grouping = array("avg", "count", "count distinct", "group_concat", "max", "min", "sum");
+		public $functions = array("char_length","trim", "date", "from_unixtime", "lower", "round", "floor", "ceil", "sec_to_time", "time_to_sec", "upper");
+		public $grouping = array("avg", "count", "count distinct", "group_concat","group_concat distinct", "distinct", "max", "min", "sum");
 		public $partitionBy = array("HASH", "LINEAR HASH", "KEY", "LINEAR KEY", "RANGE", "LIST");
 
 		function operators(?array $tableStatus): array {
-			return array("=", "<", ">", "<=", ">=", "!=", "&", "LIKE", "LIKE %%", "REGEXP", "IN", "BETWEEN", "FIND_IN_SET", "IS NULL", "NOT LIKE", "NOT REGEXP", "NOT IN", "IS NOT NULL", "SQL");
+			return array("=", "<", ">", "<=", ">=", "!=", "&", "LIKE", "LIKE %%", "REGEXP", "IN", "BETWEEN", "FIND_IN_SET", "IS NULL", "NOT LIKE","NOT LIKE %%", "NOT REGEXP", "NOT IN", "IS NOT NULL", "SQL", "SQL IN", "SQL NOT IN");
 		}
 
 		static function connect(string $server, string $username, string $password) {
